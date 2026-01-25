@@ -7449,7 +7449,7 @@ struct mg_flexspi_nor_config {
   (((uint32_t) (((uint32_t) (x)) << 26U)) & 0xFC000000U)
 
 #if MG_OTA == MG_OTA_RT1020 || MG_OTA == MG_OTA_RT1050
-// RT102X and RT105x boards support ROM API version 1.4
+// RT102X and RT105x boards.txt support ROM API version 1.4
 struct mg_flexspi_nor_driver_interface {
   uint32_t version;
   int (*init)(uint32_t instance, struct mg_flexspi_nor_config *config);
@@ -24749,7 +24749,7 @@ void mg_phy_init(struct mg_phy *phy, uint8_t phy_addr, uint8_t config) {
       phy->write_reg(phy_addr, MG_PHY_DP83x_REG_RCSR, MG_BIT(7) | MG_BIT(0));
     } else if (id1 == MG_PHY_KSZ8x) {
       // Disable isolation (override hw, it doesn't make sense at this point)
-      // - #2848, some NXP boards set ISO, even though docs say they don't
+      // - #2848, some NXP boards.txt set ISO, even though docs say they don't
       phy->write_reg(phy_addr, MG_PHY_REG_BCR,
                      (uint16_t) (phy->read_reg(phy_addr, MG_PHY_REG_BCR) &
                                  (uint16_t) ~MG_BIT(10)));
