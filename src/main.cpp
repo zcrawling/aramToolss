@@ -16,5 +16,6 @@ int main(void) {
     for (;;) {          // Run an infinite event loop
         mg_mgr_poll(&mgr, 1000);
     }
+    mg_mgr_free(&mgr);
     return 0;
 }

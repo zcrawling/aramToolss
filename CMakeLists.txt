@@ -4,8 +4,11 @@ project(aramTool)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(aramTool
-        src/main.cpp
-        src/mongoose.c
+#        src/main.cpp
+#        src/mongoose.c
+#        include/database.h
+#        src/database.cpp
+        testcase/main.cpp
 )
 
 # include 경로
