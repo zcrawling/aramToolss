@@ -6,7 +6,7 @@
 #include <utility>
 #include <filesystem>
 #include <fstream>
-#import <random>
+#include <random>
 #include "../include/mongoose.h"
 
 
@@ -74,7 +74,9 @@ Database::Database() : boards{} {
         }
         readFile.close();
 }
-
+Database::~Database() {
+        save_before_crash();
+}
 void Database::store(Post &post) {
         uint64_t id = hashing(post);
         if (titles.contains(post.title)) {
@@ -189,12 +191,17 @@ std::string Database::convert_time_string(const uint64_t time) {
         return ret;
 }
 
-uint64_t Database::hashing(const Post &post) {
+uint64_t Database::hashing(const std::string & str) {
         // FNV-1a 64bit로 hashing
         uint64_t hash = 14695981039346656037ULL;
-        for (const char c : post.title) {
+        for (const char c : str) {
                 hash ^= static_cast<uint64_t>(static_cast<unsigned char>(c));
                 hash *= 1099511628211ULL;
         }
         return hash;
+}
+
+uint64_t Database::hashing(const Post & post) {
+        // FNV-1a 64bit로 hashing
+        return hashing(post.title);
 }

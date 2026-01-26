@@ -35,14 +35,17 @@ private:
     std::set<std::string> titles;
     Board boards[MAX_BOARD];
 
-    static uint64_t hashing(const Post & post);
-
 public:
     Database();
+
+    ~Database();
+
     void store(Post &post);
     static bool serve(Board board, std::multiset<uint64_t,std::greater<>> &ret, uint64_t at, uint64_t range);
     void save_before_crash();
     static std::string convert_time_string(uint64_t time);
+    static uint64_t hashing(const Post & post);
+    static uint64_t hashing(const std::string & str);
 
 };
 

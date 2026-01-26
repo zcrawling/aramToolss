@@ -3192,7 +3192,7 @@ struct mg_l2addr {
 #endif
 
 #if 0
-TODO(): ?
+: ?
 struct eth_opts {
   bool enable_crc32_check;         // Do a CRC check on RX frames and strip it
   bool enable_mac_check;           // Do a MAC check on RX frames
@@ -3285,7 +3285,7 @@ struct mg_tcpip_if {
   uint8_t prefix_len;         // prefix length,
   uint64_t gw6[2];            // default gateway.
   bool enable_slaac;          // Enable IPv6 address autoconfiguration
-  bool enable_dhcp6_client;   // Enable DCHPv6 client TODO()
+  bool enable_dhcp6_client;   // Enable DCHPv6 client
 #endif
 
   // Internal state, user can use it but should not change it
@@ -3451,7 +3451,7 @@ struct mg_tcpip_driver_imxrt_data {
   // 37.5.1.8.2, Table 37-46 : f = ipg_clk / (2(mdc_cr + 1))
   //    ipg_clk       mdc_cr VALUE
   //    --------------------------
-  //                  -1  <-- TODO() tell driver to guess the value
+  //                  -1  <--
   //    25 MHz         4
   //    33 MHz         6
   //    40 MHz         7

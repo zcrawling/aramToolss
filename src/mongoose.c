@@ -440,7 +440,7 @@ static uint8_t *build_srv_name(uint8_t *p, struct mg_dnssd_record *r) {
 }
 
 #if 0
-// TODO(): for listing
+
 static uint8_t *build_mysrv_name(struct mg_str *name, uint8_t *p,
                                  struct mg_dnssd_record *r) {
   *p++ = name->len;  // label 1
@@ -528,7 +528,7 @@ static void handle_mdns_record(struct mg_connection *c) {
     MG_VERBOSE(("RR %u %u %s", (unsigned int) rr.atype,
                 (unsigned int) rr.aclass, name));
     if (rr.atype == 1) {  // A
-      // TODO(): ensure c->fn_data ends in \0
+
       // if we have a name to match, go; otherwise users will match and fill
       // req.r.name and set req.is_resp
       if (c->fn_data != NULL && mg_casecmp((char *) c->fn_data, name) != 0)
@@ -571,7 +571,7 @@ static void handle_mdns_record(struct mg_connection *c) {
     h->num_answers = mg_htons(1);  // RFC-6762 6: 0 questions, 1 Answer
     h->flags = mg_htons(0x8400);   // Authoritative response
     if (req.is_listing) {
-      // TODO(): RFC-6762 6: each responder SHOULD delay its response by a
+
       // random amount of time selected with uniform random distribution in the
       // range 20-120 ms.
       // TODO():
@@ -11015,7 +11015,7 @@ static char *mg_ssi(const char *path, const char *root, int depth) {
             if (datalen > 0 && ret == 0) goto fail;
           } else {
             MG_ERROR(("%s: file=%s error or too deep", path, arg));
-          } // TODO(): or OOM at recursive call
+          }
         } else if (sscanf(buf, "<!--#include virtual=\"%[^\"]", arg) > 0) {
           char tmp[MG_PATH_MAX + MG_SSI_BUFSIZ + 10], *data;
           mg_snprintf(tmp, sizeof(tmp), "%s%s", root, arg);
@@ -11027,7 +11027,7 @@ static char *mg_ssi(const char *path, const char *root, int depth) {
             if (datalen > 0 && ret == 0) goto fail;
           } else {
             MG_ERROR(("%s: virtual=%s error or too deep", path, arg));
-          } // TODO(): or OOM at recursive call
+          }
         } else {
           // Unknown SSI tag
           MG_ERROR(("Unknown SSI tag: %.*s", (int) len, buf));
@@ -12762,7 +12762,7 @@ static void mg_tls_derive_secret(const char *label, uint8_t *key, size_t keysz,
   size_t labelsz = strlen(label);
   uint8_t secret[32];
   uint8_t packed[256] = {0, (uint8_t) hashsz, (uint8_t) labelsz};
-  // TODO: assert lengths of label, key, data and hash
+
   if (labelsz > 0) memmove(packed + 3, label, labelsz);
   packed[3 + labelsz] = (uint8_t) datasz;
   if (datasz > 0) memmove(packed + labelsz + 4, data, datasz);
@@ -13958,7 +13958,7 @@ static int mg_tls_verify_cert_san(const uint8_t *der, size_t dersz,
       if (mg_match(mg_str(server_name), mg_str_n((char *) name.value, name.len),
                    NULL))
         return 1;  // and matches the host name
-    }  // TODO(): add IPv6 comparison, more items ?
+    }
   }
   return -1;
 }
@@ -16279,7 +16279,7 @@ static PORTABLE_8439_DECL void pad_if_needed(poly1305_context *ctx,
 
 #define __u8(v) ((uint8_t) ((v) &0xFF))
 
-// TODO: make this depending on the unaligned/native read size possible
+
 static PORTABLE_8439_DECL void write_64bit_int(poly1305_context *ctx,
                                                uint64_t value) {
   uint8_t result[8];
@@ -16610,7 +16610,7 @@ size_t mg_tls_pending(struct mg_connection *c) {
 long mg_tls_recv(struct mg_connection *c, void *buf, size_t len) {
   struct mg_tls *tls = (struct mg_tls *) c->tls;
   long n = mbedtls_ssl_read(&tls->ssl, (unsigned char *) buf, len);
-  if (!c->is_tls_hs && buf == NULL && n == 0) return 0;  // TODO(): MIP
+  if (!c->is_tls_hs && buf == NULL && n == 0) return 0;
   if (n == MBEDTLS_ERR_SSL_WANT_READ || n == MBEDTLS_ERR_SSL_WANT_WRITE)
     return MG_IO_WAIT;
 #if defined(MBEDTLS_ERR_SSL_RECEIVED_NEW_SESSION_TICKET)
@@ -16952,7 +16952,7 @@ size_t mg_tls_pending(struct mg_connection *c) {
 long mg_tls_recv(struct mg_connection *c, void *buf, size_t len) {
   struct mg_tls *tls = (struct mg_tls *) c->tls;
   int n = SSL_read(tls->ssl, buf, (int) len);
-  if (!c->is_tls_hs && buf == NULL && n == 0) return 0;  // TODO(): MIP
+  if (!c->is_tls_hs && buf == NULL && n == 0) return 0;
   if (n < 0 && mg_tls_err(c, tls, n) == 0) return MG_IO_WAIT;
   if (n <= 0) return MG_IO_ERR;
   return n;
@@ -22333,7 +22333,7 @@ int mg_check_ip_acl(struct mg_str acl, struct mg_addr *remote_ip) {
   int allowed = acl.len == 0 ? '+' : '-';  // If any ACL is set, deny by default
   uint32_t remote_ip4;
   if (remote_ip->is_ip6) {
-    return -1;  // TODO(): handle IPv6 ACL and addresses
+    return -1;
   } else {      // IPv4
     memcpy((void *) &remote_ip4, remote_ip->addr.ip, sizeof(remote_ip4));
     while (mg_span(acl, &entry, &acl, ',')) {
@@ -22842,7 +22842,7 @@ static size_t cmsis_tx(const void *buf, size_t len, struct mg_tcpip_if *ifp) {
 }
 
 static void cmsis_update_hash_table(struct mg_tcpip_if *ifp) {
-  // TODO(): read database, rebuild hash table
+
   ARM_DRIVER_ETH_MAC *mac = &Driver_ETH_MAC0;
   ARM_ETH_MAC_ADDR addr;
   memcpy(&addr, mcast_addr, sizeof(addr));
@@ -23139,7 +23139,7 @@ static size_t mg_cyw_tx(unsigned int ifc, void *data, size_t len) {
   uint16_t txlen = (uint16_t) (len + sizeof(*hdr));
   memset(txdata, 0, sizeof(*hdr));
   memcpy((uint8_t *) txdata + sizeof(*hdr), data, len);
-  // TODO(): hdr->bdc.priority = map IP to TOS if supporting QoS/ToS
+
   hdr->bdc.flags = 2 << 4;          // BDC version 2
   hdr->bdc.flags2 = (uint8_t) ifc;  // 0 -> STA, 1 -> AP
   // hdr->bdc.data_offset = 0; // actually zeroed above
@@ -23155,7 +23155,7 @@ static size_t mg_cyw_tx(unsigned int ifc, void *data, size_t len) {
 #pragma pack(push, 1)
 // all in network order
 
-struct eth_hdr {  // TODO(scaprile) reuse 'eth' in net_builtin.c
+struct eth_hdr {
   uint8_t dest[6];
   uint8_t src[6];
   uint16_t type;
@@ -23327,9 +23327,9 @@ static bool cyw_wifi_ap_start(char *ssid, char *pass, unsigned int channel) {
   data[0] = 1; // bss index 1 = AP
   data[1] = (uint32_t) len;
   memcpy((uint8_t *)&data[2], ssid, len);
-  // TODO(scaprile): this takes some time to process, or requires a delay before doing it
+
   if (!cyw_ioctl_iovar_set_(0, "bsscfg:ssid", (uint8_t *)&data, len + 2 * sizeof(uint32_t))) return false;
-  // TODO(scaprile): but sometimes this one takes some time to process
+
   val = (uint32_t) channel; if (!cyw_ioctl_set_(0, 30 /* SET_CHANNEL */, (uint8_t *)&val, sizeof(val))) return false;
   data[0] = 1; // bss index 1 = AP
   data[1] = 0x00400004; // security type: 0 for none, 0x00200002 for WPA, 0x00400004 for WPA2, 0x01000004 for WPA3, 0x01400004 for mixed WPA2/WPA3, 0x00400006 for mixed WPA/WPA2
@@ -23364,7 +23364,7 @@ static bool cyw_wifi_ap_start(char *ssid, char *pass, unsigned int channel) {
   val = 1; if (!cyw_ioctl_set_(1, 78 /* SET_DTIMPRD */, (uint8_t *)&val, sizeof(val))) return false;
   data[0] = 1; // bss index 1 = AP
   data[1] = 1; // UP
-  // TODO(scaprile): this takes a long time to process
+
   if (!cyw_ioctl_iovar_set_(0, "bss", (uint8_t *)&data, 2 * sizeof(uint32_t))) return false;
   return true;
 }
@@ -23680,7 +23680,7 @@ struct clm_hdr {
 
 #pragma pack(pop)
 
-// worlwide rev0, TODO(): try rev 17 for 4343W
+
 static const uint32_t country_code = 'X' + ('X' << 8) + (0 << 16);
 
 static bool cyw_bus_specific_init();
@@ -23789,7 +23789,7 @@ static bool cyw_load_clmll(void *data, size_t len) {
 // clang-format on
 
 static void cyw_update_hash_table(void) {
-  // TODO(): read database, rebuild hash table
+
   uint32_t val = 0;
   val = 1;
   cyw_ioctl_iovar_set2_(0, "mcast_list", (uint8_t *) &val, sizeof(val),
@@ -23919,7 +23919,7 @@ static bool cyw_load_fwll(void *fwdata, size_t fwlen, void *nvramdata, size_t nv
   cyw_core_reset(CYW_CHIP_SOCSRAM, false);  // cores were disabled at chip reset
   cyw_socram_init();
   cyw_load_data(CYW_CHIP_ATCMRAM_BASE, fwdata, fwlen);
-  mg_delayms(5); // TODO(scaprile): CHECK IF THIS IS ACTUALLY NEEDED
+  mg_delayms(5);
   // Load NVRAM and place 'length ~length' at the end; end of chip RAM
   {
     const uint32_t start = CYW_CHIP_RAM_SIZE - 4 - nvramlen;
@@ -23999,7 +23999,7 @@ static bool cyw_spi_init() {
   // Configure SPI and switch to 32-bit big-endian mode:
   // - High-speed mode: d->hs true
   // - IRQ POLARITY high
-  // - SPI RESPONSE DELAY 4 bytes time [not in DS] TODO(scaprile): logic ana
+  // - SPI RESPONSE DELAY 4 bytes time [not in DS]
   // - Status not sent after command, IRQ with status
   val = sw16_2(0x000204a3 | (d->hs ? MG_BIT(4) : 0)); // 4 reg content
   cyw_spi_write(CYW_SPID_FUNC_BUS | CYW_SPI_16bMODE, CYW_BUS_SPI_BUSCTRL, &val, sizeof(val));
@@ -24098,7 +24098,7 @@ static bool cyw_spi_write(unsigned int f, uint32_t addr, void *data,
   struct mg_tcpip_spi_ *s = (struct mg_tcpip_spi_ *) d->bus;
   uint32_t hdr = CYW_SPID_WR | CYW_SPID_INC | CYW_SPID_FUNC(f) |
                  CYW_SPID_ADDR(addr) | CYW_SPID_LEN(len);  // gSPI header
-  // TODO(scaprile): check spin in between and timeout values, return false
+
   if (f == CYW_SPID_FUNC_WLAN) {
     uint32_t val = 0;
     while ((val & MG_BIT(5)) != MG_BIT(5))  // F2 rx ready (FIFO ready)
@@ -24215,7 +24215,7 @@ static bool cyw_sdio_init() {
   // no block transfers on F0. if (!mg_sdio_set_blksz(s, CYW_SDIO_FUNC_BUS, 32)) return false;
   if (!mg_sdio_set_blksz(s, CYW_SDIO_FUNC_CHIP, 64)) return false;
   if (!mg_sdio_set_blksz(s, CYW_SDIO_FUNC_WLAN, 64)) return false;
-  // TODO(scaprile): we don't handle SDIO interrupts, study CCCR INTEN and SDIO support (SDIO 6.3, 8)
+  //(scaprile): we don't handle SDIO interrupts, study CCCR INTEN and SDIO support (SDIO 6.3, 8)
   // Enable chip backplane (F1)
   if (!mg_sdio_enable_f(s, CYW_SDIO_FUNC_CHIP)) return false;
   // Wait for F1 to be ready
@@ -24264,7 +24264,7 @@ static bool cyw_sdio_init() {
   // Configure WakeupCtrl, set HT_AVAIL in CLOCK_CSR
   if(!cyw_sdio_transfer(false, CYW_SDIO_FUNC_CHIP, CYW_CHIP_WAKEUPCTL, &val, 1)) return false;
   val |= MG_BIT(1) /* WAKE_TILL_HT_AVAIL */; cyw_sdio_transfer(true, CYW_SDIO_FUNC_CHIP, CYW_CHIP_WAKEUPCTL, &val, 1);
-#if 0 // TODO(scaprile): Check if this is actually necessary
+#if 0 //
   // Set BRCM_CARDCAP to CMD_NODEC. This is a vendor specific SDIO register
   val = MG_BIT(3); cyw_sdio_transfer(true, CYW_SDIO_FUNC_BUS, 0xf0 /* SDIOD_CCCR_BRCM_CARDCAP */, &val, 1);
 #endif
@@ -24384,7 +24384,7 @@ struct enet_desc {
   uint32_t *buffer;  // Data ptr
 };
 
-// Descriptors: in non-cached area (TODO(scaprile)), (37.5.1.22.2 37.5.1.23.2)
+// Descriptors: in non-cached area
 // Buffers: 64-byte aligned (37.3.14)
 static volatile struct enet_desc s_rxdesc[ETH_DESC_CNT] MG_ETH_RAM MG_64BYTE_ALIGNED;
 static volatile struct enet_desc s_txdesc[ETH_DESC_CNT] MG_ETH_RAM MG_64BYTE_ALIGNED;
@@ -24432,7 +24432,7 @@ static bool mg_tcpip_driver_imxrt_init(struct mg_tcpip_if *ifp) {
   while ((ENET->ECR & MG_BIT(0))) (void) 0;  // Wait until done
 
   // Set MDC clock divider. If user told us the value, use it.
-  // TODO(): Otherwise, guess (currently assuming max freq)
+  //
   int cr = (d == NULL || d->mdc_cr < 0) ? 24 : d->mdc_cr;
   ENET->MSCR = (1 << 8) | ((cr & 0x3f) << 1);  // HOLDTIME 2 clks
   struct mg_phy phy = {enet_read_phy, enet_write_phy};
@@ -24487,7 +24487,7 @@ static size_t mg_tcpip_driver_imxrt_tx(const void *buf, size_t len,
 }
 
 static void mg_tcpip_driver_imxrt_update_hash_table(struct mg_tcpip_if *ifp) {
-  // TODO(): read database, rebuild hash table
+
   // RM 37.3.4.3.2
   uint32_t hash_table[2] = {0, 0};
   // uint8_t hash64 = ((~mg_crc32(0, mcast_addr, 6)) >> 26) & 0x3f;
@@ -25491,7 +25491,7 @@ static bool mg_tcpip_driver_ra_init(struct mg_tcpip_if *ifp) {
   s_ifp = ifp;
 
   // Init SMI clock timing. If user told us the clock value, use it.
-  // TODO(): Otherwise, guess
+
   s_smispin = d->clock / 15000000;
 
   // Init RX descriptors
@@ -25752,7 +25752,7 @@ static size_t mg_tcpip_driver_rw612_tx(const void *buf, size_t len,
 
 
 static void mg_tcpip_driver_rw612_update_hash_table(struct mg_tcpip_if *ifp) {
-  // TODO(): read database, rebuild hash table
+
   ENET->GAUR = MG_BIT(1); // see imxrt, it reduces to this for mDNS
   (void) ifp;
 }
@@ -26011,7 +26011,7 @@ static size_t mg_tcpip_driver_same54_tx(const void *buf, size_t len,
 }
 
 static void mg_tcpip_driver_same54_update_hash_table(struct mg_tcpip_if *ifp) {
-  // TODO(): read database, rebuild hash table
+
   // Setting Hash Index for 01:00:5e:00:00:fb (multicast)
   // 24.6.9 Hash addressing
   // computed hash is 55, which means bit 23 (55 - 32) in
@@ -26119,7 +26119,7 @@ struct mg_tcpip_driver mg_tcpip_driver_same54 = {
 bool mg_sdio_transfer(struct mg_tcpip_sdio *sdio, bool write, unsigned int f,
                       uint32_t addr, void *data, uint32_t len) {
   uint32_t arg, val = 0;
-  unsigned int blksz = 64;  // TODO(): mg_sdio_set_blksz() stores in an array,
+  unsigned int blksz = 64;
                             // index on f, skip if 0
   if (len == 1) {
     arg = (write ? MG_SDIO_WR : 0) | MG_SDIO_FUNC(f) | MG_SDIO_ADDR(addr) |
@@ -26154,7 +26154,7 @@ bool mg_sdio_set_blksz(struct mg_tcpip_sdio *sdio, unsigned int f,
   val = (blksz >> 8) & 0x0f;  // SDIO 6.10 Table 6-4, max 2048
   if (!mg_sdio_transfer(sdio, true, 0, MG_SDIO_FBR_FnBLKSZ(f) + 1, &val, 1))
     return false;
-  // TODO(): store in an array, index on f. Static 8-element array
+
   MG_VERBOSE(("F%c block size set", (f & 7) + '0'));
   return true;
 }
@@ -26432,7 +26432,7 @@ static size_t mg_tcpip_driver_stm32f_tx(const void *buf, size_t len,
 }
 
 static void mg_tcpip_driver_stm32f_update_hash_table(struct mg_tcpip_if *ifp) {
-  // TODO(): read database, rebuild hash table
+
   ETH->MACA1LR = (uint32_t) mcast_addr[3] << 24 |
                  (uint32_t) mcast_addr[2] << 16 |
                  (uint32_t) mcast_addr[1] << 8 | (uint32_t) mcast_addr[0];
@@ -26770,7 +26770,7 @@ static void mg_tcpip_driver_stm32h_update_hash_table(struct mg_tcpip_if *ifp) {
 #if SYNOPSYS_ENET_NOHASHTABLE
   ETH->MACPFR = MG_BIT(4);  // Pass Multicast (pass all multicast frames)
 #else
-  // TODO(): read database, rebuild hash table
+
   // add mDNS / DNS-SD multicast address
   ETH->MACA1LR = (uint32_t) mcast_addr[3] << 24 |
                  (uint32_t) mcast_addr[2] << 16 |
@@ -27066,7 +27066,7 @@ static size_t mg_tcpip_driver_tm4c_tx(const void *buf, size_t len,
 }
 
 static void mg_tcpip_driver_tm4c_update_hash_table(struct mg_tcpip_if *ifp) {
-  // TODO(): read database, rebuild hash table
+
   // add mDNS / DNS-SD multicast address
   EMAC->EMACADDR1L = (uint32_t) mcast_addr[3] << 24 |
                      (uint32_t) mcast_addr[2] << 16 |
@@ -27305,7 +27305,7 @@ static size_t mg_tcpip_driver_tms570_tx(const void *buf, size_t len,
 }
 
 static void mg_tcpip_driver_tms570_update_hash_table(struct mg_tcpip_if *ifp) {
-  // TODO(): read database, rebuild hash table
+
   // Setting Hash Index for 01:00:5e:00:00:fb (multicast)
   // using TMS570 XOR method (32.5.37).
   // computed hash is 55, which means bit 23 (55 - 32) in
@@ -27767,7 +27767,7 @@ static size_t mg_tcpip_driver_xmc_tx(const void *buf, size_t len,
 }
 
 static void mg_tcpip_driver_xmc_update_hash_table(struct mg_tcpip_if *ifp) {
-  // TODO(): read database, rebuild hash table
+
   // set the multicast address filter
   ETH0->MAC_ADDRESS1_HIGH =
       MG_U32(0, 0, mcast_addr[5], mcast_addr[4]) | MG_BIT(31);
@@ -28013,7 +28013,7 @@ static size_t mg_tcpip_driver_xmc7_tx(const void *buf, size_t len,
 }
 
 static void mg_tcpip_driver_xmc7_update_hash_table(struct mg_tcpip_if *ifp) {
-  // TODO(): read database, rebuild hash table
+
   // set multicast MAC address
   ETH0->SPEC_ADD2_BOTTOM = mcast_addr[3] << 24 | mcast_addr[2] << 16 |
                            mcast_addr[1] << 8 | mcast_addr[0];
@@ -28044,7 +28044,7 @@ static bool mg_tcpip_driver_xmc7_poll(struct mg_tcpip_if *ifp, bool s1) {
     MG_SET_BITS(ctl, 0xFF00, 4 << 8);  // /5 for 25M clock
     if (speed == MG_PHY_SPEED_1000M) {
       netconf |= MG_BIT(10);        // 1000M
-      MG_SET_BITS(ctl, 0xFF00, 0);  // /1 for 125M clock TODO() IS THIS NEEDED ?
+      MG_SET_BITS(ctl, 0xFF00, 0);  // /1 for 125M clock
     } else if (speed == MG_PHY_SPEED_10M) {
       netconf &= ~MG_BIT(0);         // 10M
       MG_SET_BITS(ctl, 0xFF00, 49);  // /50 for 2.5M clock
