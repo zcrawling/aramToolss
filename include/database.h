@@ -11,11 +11,13 @@
 #include <queue>
 #include <string>
 #include <set>
-
+#include <thread>
+#include <shared_mutex>
 
 struct Post;
 
 struct Board {
+    mutable std::shared_mutex board_mtx;
     std::string url;
     std::string name;
     std::multiset<uint64_t,std::greater<>> bbs;
@@ -29,9 +31,9 @@ struct Post {
     uint64_t board_id;
     Post(const std::string &url, const std::string &title, const std::string &main, uint64_t date, uint64_t board_id);
 };
-
 class Database {
 private:
+    mutable std::shared_mutex db_mtx;
     std::set<std::string> titles;
     Board boards[MAX_BOARD];
 
@@ -48,6 +50,13 @@ public:
     static uint64_t hashing(const std::string & str);
 
 };
+class DB_with_Comm : public Database {
+private:
+    std::thread comm_thread;
+public:
+    DB_with_Comm();
+    void server();
 
+};
 
 #endif //ARAMTOOL_DATABASE_H

@@ -1,0 +1,26 @@
+{
+  "공통": [
+    {"title": "후마니타스", "url": "https://hc.khu.ac.kr/hc_kor/user/bbs/BMSR00040/list.do?menuNo=4300048"},
+    {"title": "전체-일반", "url": "https://www.khu.ac.kr/kor/user/bbs/BMSR00040/list.do?menuNo=200316&pageIndex=1&catId=&searchCondition=&searchKeyword=\n"},
+    {"title": "전체-학사", "url": "https://www.khu.ac.kr/kor/user/bbs/BMSR00040/list.do?menuNo=200317"},
+    {"title": "전체-장학", "url": "https://www.khu.ac.kr/kor/user/bbs/BMSR00040/list.do?menuNo=200318"},
+    {"title": "전체-근로", "url": "https://www.khu.ac.kr/kor/user/bbs/BMSR00040/list.do?menuNo=200361"}
+  ],
+  "장학": [
+    {"title": "응용물리학과-장학", "url": "https://com.khu.ac.kr/physics/user/bbs/BMSR00040/list.do?menuNo=3000055"}
+  ],
+    "대외활동": [
+    {"title": "전자공학과-대외활동", "url": "https://ee.khu.ac.kr/ee/user/bbs/BMSR00040/list.do?menuNo=1900039&boardType=&pageIndex=2&searchCondition=&searchKeyword=&userDisplayCount=10"}
+  ],
+  "취업*인턴": [
+    {"title": "국어국문학과-취업", "url": "https://gukmun.khu.ac.kr/gukmun/user/bbs/BMSR00040/list.do?menuNo=16000044&boardType=&pageIndex=1&searchCondition=&searchKeyword=&userDisplayCount=10"},
+    {"title": "문과대-취업", "url": "https://human.khu.ac.kr/human_kor/user/bbs/BMSR00040/list.do?menuNo=15800035"},
+    {"title": "일본어학과-취업", "url": "https://japanese.khu.ac.kr/japanese/user/bbs/BMSR00040/list.do?menuNo=2200016"},
+    {"title": "경영대-취업", "url": "https://kbiz.khu.ac.kr/biz_kor/user/bbs/BMSR00040/list.do?menuNo=14500147"},
+    {"title": "한국어학과-취업", "url": "https://korean.khu.ac.kr/korean/user/bbs/BMSR00040/list.do?menuNo=4500012&boardType=&pageIndex=1&searchCondition=&searchKeyword=&userDisplayCount=10"},
+    {"title": "러시아어학과-취업","url": "https://russia.khu.ac.kr/russia/user/bbs/BMSR00040/list.do?menuNo=2400015"}
+
+
+
+  ]
+}
